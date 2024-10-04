@@ -1,27 +1,27 @@
 PACKAGE_NAME := organize_me
 BUILD_DIR := "$(realpath)/build"
-VERSION := $(shell cat VERSION)
+PACKAGE_VERSION := $(shell cat VERSION)
 
 .PHONY: test bootstrap package mypy ruff format check help
 
 # Default target
 .DEFAULT_GOAL := help
 
-check: ruff mypy
-
 run: bootstrap
 	@echo "Running ..."
 	@poetry run organize-me
+
+package: bootstrap
+	@echo "📦 Packaging $(PACKAGE_NAME) version $(PACKAGE_VERSION)..."
+	@poetry build
+	@echo "✅  Package created"
+
+check: ruff mypy
 
 mypy: bootstrap
 	@echo "🔍 Running mypy..."
 	@poetry run mypy --strict -p $(PACKAGE_NAME)
 	@echo "✅ mypy passed"
-
-package: bootstrap
-	@echo "📦 Packaging $(PACKAGE_NAME) version $(VERSION)..."
-	@poetry build
-	@echo "✅  Package created"
 
 ruff: bootstrap
 	@echo "🔍 Running ruff..."
