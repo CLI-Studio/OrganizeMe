@@ -1,0 +1,25 @@
+name: CI/CD
+
+on:
+  push:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: daviddsapir/python-poetry:latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Run Check
+        run: make check
+  test:
+    runs-on: ubuntu-latest
+    needs: build
+    container:
+      image: daviddsapir/python-poetry:latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Run Tests
+        run: make test
