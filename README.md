@@ -7,7 +7,7 @@ OrganizeMe is a simple yet powerful command-line application for managing to-do 
 - [Features](#features)
 - [Installation](#installation)
 - [Usage](#usage)
-- [Roadmap](#Roadmap)
+- [Roadmap](#roadmap)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -19,14 +19,10 @@ OrganizeMe is a simple yet powerful command-line application for managing to-do 
 
 ### Installation
 
-#### Prerequisites
-- Python 3.8+
-- Poetry (dependency management)
-
 #### Setup
 1. Clone the repository:
     ```sh
-    git clone <repository-url>
+    git clone https://github.com/CLI-Studio/OrganizeMe.git
     cd tidylist
     ```
 
@@ -42,11 +38,17 @@ OrganizeMe is a simple yet powerful command-line application for managing to-do 
 ### Roadmap
 - Google Authentication: Secure user authentication via Google.
 - Improved UI: Create a more user-friendly command-line interface.
+- calendar view: Add a calendar view to see tasks by date.
+- (optional) notifications system: Add notifications for upcoming tasks.
 - Tagging System: Add tags to tasks for better organization.
 - Task Sorting: Multiple sorting options, such as by date, tag, or priority.
 - Readme update: Add usage instructions, examples and demo/gif.
-
+-
 ### Contributing
+#### Dependencies
+- Python 3.8+
+- Poetry (dependency management)
+
 Contributions will be highly appreciated in the future. To contribute, please submit a pull request describing the changes you'd like to make.
 
 ### License
