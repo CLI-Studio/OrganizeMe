@@ -43,7 +43,6 @@ OrganizeMe is a simple yet powerful command-line application for managing to-do 
 - Tagging System: Add tags to tasks for better organization.
 - Task Sorting: Multiple sorting options, such as by date, tag, or priority.
 - Readme update: Add usage instructions, examples and demo/gif.
--
 ### Contributing
 #### Dependencies
 - Python 3.8+
