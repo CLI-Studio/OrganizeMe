@@ -61,3 +61,6 @@ class TaskManager:
             start_date=start_date, end_date=end_date
         )
         self.save_tasks()
+
+    def extract_data(self) -> tuple:
+        return Task.model_fields.keys(), [task.__dict__.values() for task in self.tasks.values()]
