@@ -1,13 +1,15 @@
 import os
 import json
 import uuid
+from abc import ABC
 from datetime import datetime
 from typing import Optional, Dict
 from organize_me.exceptions import DuplicateIdError, TaskNotFoundError
 from organize_me.task import Task
+from organize_me.api import Api
 
 
-class TaskManager:
+class TaskApi(Api):
     JSON_FILE = os.path.join(os.getcwd(), 'tasks.json')
 
     def __init__(self, tasks: Optional[Dict[int, Task]] = None):
@@ -62,5 +64,5 @@ class TaskManager:
         )
         self.save_tasks()
 
-    def extract_data(self) -> tuple:
+    def data(self) -> tuple:
         return Task.model_fields.keys(), [task.__dict__.values() for task in self.tasks.values()]

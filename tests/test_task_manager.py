@@ -1,7 +1,7 @@
 import os
 import json
 import pytest
-from organize_me.task_manager import TaskManager
+from organize_me.task_api import TaskApi
 from organize_me.task import Task
 from organize_me.exceptions import TaskNotFoundError
 from tests.test_task import dummy_dates
@@ -9,7 +9,7 @@ from tests.test_task import dummy_dates
 
 @pytest.fixture
 def task_manager():
-    return TaskManager()
+    return TaskApi()
 
 
 @pytest.fixture
@@ -23,25 +23,25 @@ def dummy_tasks():
 
 @pytest.fixture(scope='function', autouse=True)
 def remove_json_file():
-    if os.path.exists(TaskManager.JSON_FILE):
-        os.remove(TaskManager.JSON_FILE)
+    if os.path.exists(TaskApi.JSON_FILE):
+        os.remove(TaskApi.JSON_FILE)
 
 
 def test_save_tasks(dummy_tasks):
-    task_manager = TaskManager(tasks=dummy_tasks)
+    task_manager = TaskApi(tasks=dummy_tasks)
     task_manager.save_tasks()
-    assert os.path.exists(TaskManager.JSON_FILE)
-    with open(TaskManager.JSON_FILE, 'r') as file:
+    assert os.path.exists(TaskApi.JSON_FILE)
+    with open(TaskApi.JSON_FILE, 'r') as file:
         data = json.load(file)
     expected = {str(key): task.model_dump_json() for key, task in dummy_tasks.items()}
     assert data == expected
 
 
 def test_read_json(dummy_tasks):
-    task_manager = TaskManager(tasks=dummy_tasks)
+    task_manager = TaskApi(tasks=dummy_tasks)
     task_manager.save_tasks()
-    assert os.path.exists(TaskManager.JSON_FILE)
-    task_manager_2 = TaskManager()
+    assert os.path.exists(TaskApi.JSON_FILE)
+    task_manager_2 = TaskApi()
     assert task_manager_2.tasks == dummy_tasks
 
 

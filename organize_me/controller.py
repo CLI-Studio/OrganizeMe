@@ -1,14 +1,12 @@
-from task_manager import TaskManager
+from task_api import TaskApi
 from layout import Layout
 from task import Task
 
 
 class Controller:
     def __init__(self, tasks=None):
-        self.tm = TaskManager(tasks)
-        columns, data = self.tm.extract_data()
-        print(type(columns), columns)
-        print(type(data[0]), data[0])
+        self.api = TaskApi(tasks)
+        columns, data = self.api.data()
         self.app_layout = Layout(columns, data)
 
     def run(self):

@@ -42,6 +42,6 @@ def example_app() -> Layout:
 
 
 if __name__ == "__main__":
-    # app = example_app()
-    app = Layout([], [])
+    app = example_app()
+    # app = Layout([], [])
     app.run()
