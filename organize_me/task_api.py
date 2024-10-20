@@ -1,8 +1,6 @@
 import os
 import json
 import uuid
-from abc import ABC
-from datetime import datetime
 from typing import Optional, Dict
 from organize_me.exceptions import DuplicateIdError, TaskNotFoundError
 from organize_me.task import Task
