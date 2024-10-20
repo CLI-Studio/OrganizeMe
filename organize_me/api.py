@@ -1,9 +1,10 @@
 from abc import ABC, abstractmethod
+from typing import Any, Dict, List
 
 
 class Api(ABC):
     @abstractmethod
-    def data(self) -> tuple:
+    def data(self) -> tuple[List[str], List[Any]]:
         """
         Extract data from the API
 
@@ -13,7 +14,7 @@ class Api(ABC):
         pass
 
     @abstractmethod
-    def add(self, **kwargs) -> int:
+    def add(self, **kwargs: Dict[str, Any]) -> int:
         """
         Add data to the API
 
@@ -27,7 +28,7 @@ class Api(ABC):
         pass
 
     @abstractmethod
-    def update(self, o_id: int, **kwargs) -> None:
+    def update(self, o_id: int, **kwargs: Dict[str, Any]) -> None:
         """
         Update data in the API
 

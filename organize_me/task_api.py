@@ -1,7 +1,7 @@
 import os
 import json
 import uuid
-from typing import Optional, Dict
+from typing import Optional, Dict, Any, List
 from organize_me.exceptions import DuplicateIdError, TaskNotFoundError
 from organize_me.task import Task
 from organize_me.api import Api
@@ -13,15 +13,15 @@ class TaskApi(Api):
     def __init__(self, tasks: Optional[Dict[int, Task]] = None):
         self.tasks: Dict[int, Task] = tasks or self.read_json()
 
-    def data(self) -> tuple:
-        return Task.model_fields.keys(), [task.__dict__.values() for task in self.tasks.values()]
+    def data(self) -> tuple[List[str], List[Any]]:
+        return list(Task.model_fields.keys()), [task.__dict__.values() for task in self.tasks.values()]
 
-    def add(self, **kwargs) -> int:
+    def add(self, **kwargs: Dict[str, Any]) -> int:
         task_id = self._generate_task_id()
         self.tasks[task_id] = Task(id=task_id, **kwargs)
         return task_id
 
-    def update(self, o_id: int, **kwargs) -> None:
+    def update(self, o_id: int, **kwargs: Dict[str, Any]) -> None:
         self.get_task(o_id).update(**kwargs)
         self.save_tasks()
 
