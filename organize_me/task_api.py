@@ -2,9 +2,10 @@ import os
 import json
 import uuid
 from typing import Optional, Dict, Any, List
-from organize_me.exceptions import DuplicateIdError, TaskNotFoundError
+from organize_me.exceptions import DuplicateIdError, TaskNotFoundError, DateStrFormatError, DateTypeError
 from organize_me.task import Task
 from organize_me.api import Api
+from datetime import datetime
 
 
 class TaskApi(Api):
@@ -18,7 +19,7 @@ class TaskApi(Api):
 
     def add(self, **kwargs: Dict[str, Any]) -> int:
         task_id = self._generate_task_id()
-        self.tasks[task_id] = Task(id=task_id, **kwargs)
+        self.tasks[task_id] = self.create(task_id, **kwargs)
         return task_id
 
     def update(self, o_id: int, **kwargs: Dict[str, Any]) -> None:
@@ -30,6 +31,24 @@ class TaskApi(Api):
             raise TaskNotFoundError(o_id)
         self.tasks.pop(o_id)
         self.save_tasks()
+
+    def create(self, task_id: int, **kwargs: Dict[str, Any]) -> Task:
+        description = str(kwargs.get('description', None))
+        title = str(kwargs.get('title', None))
+        start_date = self._convert_date_format(kwargs.get('start_date'))
+        end_date = self._convert_date_format(kwargs.get('end_date'))
+        return Task(id=task_id, title=title, description=description, start_date=start_date, end_date=end_date)
+
+    @staticmethod
+    def _convert_date_format(date_input: Any) -> Optional[datetime]:
+        if isinstance(date_input, str):
+            try:
+                return datetime.fromisoformat(date_input)
+            except ValueError:
+                raise DateStrFormatError(date_input)
+        elif date_input is not None and not isinstance(date_input, datetime):
+            raise DateTypeError(date_input)
+        return date_input
 
     def save_tasks(self) -> None:
         with open(self.JSON_FILE, 'w') as outfile:
@@ -60,16 +79,3 @@ class TaskApi(Api):
         if task is None:
             raise TaskNotFoundError(task_id)
         return task
-
-    # def add_task(self, title: str, description: Optional[str] = None,
-    #              start_date: Optional[datetime] = None, end_date: Optional[datetime] = None) -> int:
-
-    # def update_task(self, task_id: int, title: Optional[str] = None,
-    #                 description: Optional[str] = None, start_date: Optional[datetime] = None,
-    #                 end_date: Optional[datetime] = None) -> None:
-    #     task = self.get_task(task_id)
-    #     task.update(
-    #         title=title, description=description,
-    #         start_date=start_date, end_date=end_date
-    #     )
-    #     self.save_tasks()

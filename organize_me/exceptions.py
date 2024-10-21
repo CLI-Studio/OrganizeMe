@@ -16,3 +16,17 @@ class TaskIdRequiredError(Exception):
     def __init__(self) -> None:
         self.message = "Task ID is required to complete this operation"
         super().__init__(self.message)
+
+
+class DateStrFormatError(Exception):
+    """Raised when a task date is invalid."""
+    def __init__(self, date: str) -> None:
+        self.message = f"Invalid date format: {date}, must be in ISO format"
+        super().__init__(self.message)
+
+
+class DateTypeError(Exception):
+    """Raised when a task date is invalid."""
+    def __init__(self, date: str) -> None:
+        self.message = f"Invalid date type: {date}, must be a string or a datetime object"
+        super().__init__(self.message)

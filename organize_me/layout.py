@@ -14,7 +14,7 @@ class Layout(App[Any]):
 
     def __init__(self, columns: List[str], data: List[Any]) -> None:
         super().__init__()
-        self.data_table: Optional[DataTable] = None
+        self.data_table: Optional[DataTable[Any]] = None
         self.columns = columns
         self.data = [[long_dates(value) if isinstance(value, datetime) else value for value in row] for row in data]
 
@@ -22,7 +22,7 @@ class Layout(App[Any]):
         pass
 
     def compose(self) -> ComposeResult:
-        table: DataTable = DataTable()
+        table: DataTable[Any] = DataTable()
         table.cursor_type = "row"
         if self.columns:
             table.add_columns(*self.columns)

@@ -3,10 +3,11 @@ from organize_me.layout import Layout
 from organize_me.task import Task
 from organize_me.api import Api
 from datetime import datetime
+from typing import Optional, Dict
 
 
 class Controller:
-    def __init__(self, tasks=None) -> None:
+    def __init__(self, tasks: Optional[Dict[int, Task]] = None):
         self.api: Api = TaskApi(tasks)
         columns, data = self.api.data()
         self.app_layout = Layout(columns, data)
