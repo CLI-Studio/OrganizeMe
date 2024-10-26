@@ -4,7 +4,7 @@ from typing import Any, Dict, List
 
 class Api(ABC):
     @abstractmethod
-    def data(self) -> tuple[List[str], List[Any]]:
+    def data(self) -> tuple[List[str], List[List[Any]]]:
         """
         Extract data from the API
 

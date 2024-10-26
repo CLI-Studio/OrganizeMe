@@ -9,8 +9,7 @@ from typing import Optional, Dict
 class Controller:
     def __init__(self, tasks: Optional[Dict[int, Task]] = None):
         self.api: Api = TaskApi(tasks)
-        columns, data = self.api.data()
-        self.app_layout = Layout(columns, data)
+        self.app_layout = Layout(api=self.api)
 
     def run(self) -> None:
         self.app_layout.run()

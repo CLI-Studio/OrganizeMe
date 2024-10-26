@@ -30,3 +30,10 @@ class DateTypeError(Exception):
     def __init__(self, date: str) -> None:
         self.message = f"Invalid date type: {date}, must be a string or a datetime object"
         super().__init__(self.message)
+
+
+class EmptyObjectDataError(Exception):
+    """Raised when an object is empty."""
+    def __init__(self) -> None:
+        self.message = "Object data is empty"
+        super().__init__(self.message)

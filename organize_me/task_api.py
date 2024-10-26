@@ -14,8 +14,8 @@ class TaskApi(Api):
     def __init__(self, tasks: Optional[Dict[int, Task]] = None):
         self.tasks: Dict[int, Task] = tasks or self.read_json()
 
-    def data(self) -> tuple[List[str], List[Any]]:
-        return list(Task.model_fields.keys()), [task.__dict__.values() for task in self.tasks.values()]
+    def data(self) -> tuple[List[str], List[List[Any]]]:
+        return list(Task.model_fields.keys()), [list(task.__dict__.values()) for task in self.tasks.values()]
 
     def add(self, **kwargs: Dict[str, Any]) -> int:
         task_id = self._generate_task_id()
@@ -72,7 +72,6 @@ class TaskApi(Api):
             task_id = uuid.uuid4().int
             if task_id not in self.tasks:
                 return task_id
-            raise DuplicateIdError(task_id)
 
     def get_task(self, task_id: int) -> Task:
         task = self.tasks.get(task_id)
