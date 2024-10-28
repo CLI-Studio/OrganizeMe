@@ -19,15 +19,15 @@ class ExampleApi(Api):
         columns = ["id", "name", "age", "date"]
         return columns, [list(person.values()) for person in self.people.values()]
 
-    def update(self, o_id: int, **kwargs: any) -> None:
+    def update(self, o_id: int, **kwargs: Any) -> None:
         if o_id in self.people:
             # update only the fields that are in the kwargs
             self.people[o_id] = {**self.people[o_id], **self.serialize_data(**kwargs)}
         else:
             raise ValueError(f"ID {o_id} not found")
 
-    def add(self, **kwargs: any) -> int:
-        o_id = self.id() if "id" not in kwargs else kwargs["id"]
+    def add(self, **kwargs: Any) -> int:
+        o_id: int = self.id() if "id" not in kwargs else kwargs["id"]
         self.people[o_id] = self.serialize_data(**kwargs)
         return o_id
 
@@ -51,7 +51,7 @@ class ExampleApi(Api):
             "date": lambda x: datetime.fromisoformat(x),
         }
 
-    def __str__(self):
+    def __str__(self) -> str:
         return str(self.people)
 
 

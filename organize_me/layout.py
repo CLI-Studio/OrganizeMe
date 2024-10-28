@@ -7,7 +7,7 @@ from organize_me.exceptions import EmptyObjectDataError
 from textual.coordinate import Coordinate
 # Example API for testing
 from organize_me.exampleApi import ExampleApi
-
+from textual.widgets.data_table import RowKey
 
 def format_long_date(date: datetime) -> str:
     return date.strftime("%Y-%m-%d %H:%M")
@@ -60,7 +60,7 @@ class Layout(App[Any]):
         self.add_item_callback(raw_data)
         # self.push_screen(screen=AddItemScreen(), callback=self.add_item_callback, modal=True)
 
-    def add_item_callback(self, item: Dict[str, str]) -> None:
+    def add_item_callback(self, item: Dict[str, object]) -> None:
         """Callback for adding a new item to the API and table."""
         self.api.add(**item)
         self.table.add_row(*item.values())
@@ -92,7 +92,7 @@ class Layout(App[Any]):
         id_coords = Coordinate(coords.row, self.OBJ_ID_COL)
         return int(self.table.get_cell_at(id_coords))
 
-    def get_row_key(self):
+    def get_row_key(self) -> RowKey:
         """Get the row key of the currently selected row."""
         coords = self.table.cursor_coordinate
         return self.table.coordinate_to_cell_key(coords)[0]

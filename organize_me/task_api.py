@@ -20,7 +20,7 @@ class TaskApi(Api):
         return list(Task.model_fields.keys()), [list(task.__dict__.values()) for task in self.tasks.values()]
 
     def add(self, **kwargs: Any) -> int:
-        task_id = self._generate_task_id() if 'id' not in kwargs else kwargs['id']
+        task_id: int = self._generate_task_id() if 'id' not in kwargs else kwargs['id']
         data = self.serialize_data(**kwargs)
         self.tasks[task_id] = Task(id=task_id, **data)
         return task_id

@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Optional, ClassVar, Any, Dict, Callable
+from typing import Optional, ClassVar, Any, Dict, Callable, Union
 from pydantic import BaseModel, Field, field_validator, model_validator, ConfigDict
 
 
@@ -23,10 +23,12 @@ class Task(BaseModel):
     @staticmethod
     def fields() -> Dict[str, Callable[[str], Any]]:
 
-        def date_convert(date_input: str or None or datetime) -> Optional[datetime]:
-            if date_input and isinstance(date_input, str):
+        def date_convert(date_input: Union[str, None, datetime]) -> Optional[datetime]:
+            if isinstance(date_input, str):
                 return datetime.fromisoformat(date_input)
-            return date_input
+            elif isinstance(date_input, datetime):
+                return date_input
+            return None
 
         return {
             "id": int,
