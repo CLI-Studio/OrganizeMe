@@ -1,11 +1,10 @@
 from datetime import datetime
-from typing import Optional, ClassVar, Any
-from pydantic import BaseModel, Field, field_validator, model_validator
+from typing import Optional, ClassVar, Any, Dict, Callable
+from pydantic import BaseModel, Field, field_validator, model_validator, ConfigDict
 
 
 class Task(BaseModel):
-    class Config:
-        validate_assignment = True
+    model_config = ConfigDict(validate_assignment=True)
 
     ERROR_ID_MUST_BE_POSITIVE: ClassVar[str] = "Task ID must be a positive integer."
     ERROR_TITLE_EMPTY: ClassVar[str] = "Title cannot be empty or only whitespace."
@@ -20,6 +19,24 @@ class Task(BaseModel):
     update_date: datetime = Field(default_factory=datetime.now)
     start_date: Optional[datetime] = Field(default=None)
     end_date: Optional[datetime] = Field(default=None)
+
+    @staticmethod
+    def fields() -> Dict[str, Callable[[str], Any]]:
+
+        def date_convert(date_input: str or None or datetime) -> Optional[datetime]:
+            if date_input and isinstance(date_input, str):
+                return datetime.fromisoformat(date_input)
+            return date_input
+
+        return {
+            "id": int,
+            "title": str,
+            "description": str,
+            "create_date": lambda x: date_convert(x),
+            "update_date": lambda x: date_convert(x),
+            "start_date": lambda x: date_convert(x),
+            "end_date": lambda x: date_convert(x),
+        }
 
     # noinspection PyNestedDecorators
     @field_validator('id')
@@ -76,4 +93,3 @@ class Task(BaseModel):
 
     def __validate__(self) -> None:
         self.__class__.model_validate(self.model_dump())
-        # Task.model_validate(self.model_dump())
