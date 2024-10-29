@@ -2,7 +2,7 @@ import os
 import json
 import uuid
 from typing import Optional, Dict, Any, List, Callable
-from organize_me.exceptions import TaskNotFoundError
+from organize_me.exceptions import TaskNotFoundError, DuplicateIdError
 from organize_me.task import Task
 from organize_me.api import Api
 
@@ -20,6 +20,8 @@ class TaskApi(Api):
         return list(Task.model_fields.keys()), [list(task.__dict__.values()) for task in self.tasks.values()]
 
     def add(self, **kwargs: Any) -> int:
+        if 'id' in kwargs and kwargs['id'] in self.tasks:
+            raise DuplicateIdError(kwargs['id'])
         task_id: int = self._generate_task_id() if 'id' not in kwargs else kwargs['id']
         data = self.serialize_data(**kwargs)
         self.tasks[task_id] = Task(id=task_id, **data)

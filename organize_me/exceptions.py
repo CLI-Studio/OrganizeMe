@@ -1,6 +1,6 @@
 class DuplicateIdError(Exception):
     def __init__(self, task_id: int) -> None:
-        self.message = f"Task ID {task_id} already exists"
+        self.message = f"ID {task_id} already exists!"
         super().__init__(self.message)
 
 

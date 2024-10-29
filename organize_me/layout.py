@@ -5,9 +5,10 @@ from datetime import datetime
 from organize_me.api import Api
 from organize_me.exceptions import EmptyObjectDataError
 from textual.coordinate import Coordinate
+from textual.widgets.data_table import RowKey
 # Example API for testing
 from organize_me.exampleApi import ExampleApi
-from textual.widgets.data_table import RowKey
+
 
 def format_long_date(date: datetime) -> str:
     return date.strftime("%Y-%m-%d %H:%M")
@@ -67,12 +68,17 @@ class Layout(App[Any]):
 
     def action_update(self) -> None:
         """Update the currently selected row with new data."""
-        row_key = self.get_row_key()
-        raw_data = dict(zip(self.get_column_labels(), self.table.get_row(row_key)))
+        raw_data = dict(zip(self.get_column_labels(), self.table.get_row(self.get_row_key())))
         # Simulating an update to the name for demonstration
         raw_data["name"] = "updated name"
         self.update_item_callback(raw_data)
         # self.push_screen(screen=AddItemScreen(raw_data), callback=self.add_item_callback, modal=True)
+
+    def action_validate(self) -> None:
+        if not self.table:
+            return
+        if not self.table.rows:
+            return
 
     def update_item_callback(self, item: Dict[str, str]) -> None:
         """Callback for updating an existing item in the API and table."""

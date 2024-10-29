@@ -3,6 +3,8 @@ from organize_me.api import Api
 from datetime import datetime
 from random import randint
 
+from organize_me.exceptions import DuplicateIdError
+
 
 class ExampleApi(Api):
     def __init__(self) -> None:
@@ -27,6 +29,8 @@ class ExampleApi(Api):
             raise ValueError(f"ID {o_id} not found")
 
     def add(self, **kwargs: Any) -> int:
+        # if "id" in kwargs and kwargs["id"] in self.people:
+        #     raise DuplicateIdError(kwargs['id'])
         o_id: int = self.id() if "id" not in kwargs else kwargs["id"]
         self.people[o_id] = self.serialize_data(**kwargs)
         return o_id
