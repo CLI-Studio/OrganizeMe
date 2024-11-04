@@ -1,10 +1,10 @@
 from datetime import datetime, timezone
-from typing import List, Dict, Optional
+from typing import List, Dict, Optional, Any
 
-from googleapiclient.discovery import Resource
+from googleapiclient.discovery import Resource  # type: ignore
 
 
-def get_future_events(service: Resource) -> List[Dict]:
+def get_future_events(service: Resource) -> Any:
     """
     Fetches the next 10 upcoming events from the user's primary Google Calendar.
 
@@ -33,7 +33,7 @@ def get_future_events(service: Resource) -> List[Dict]:
         return []
 
 
-def display(events: List[Dict]) -> None:
+def display(events: List[Dict[str, Any]]) -> None:
     """
     Displays the start time and summary of each event.
 
@@ -60,7 +60,7 @@ def delete_event(service: Resource, event_id: str) -> None:
 
 
 # event dictionary keys: 'summary', 'location', 'description', 'start', 'end', 'attendees', 'reminders'
-def add_event(service: Resource, event: Dict) -> None:
+def add_event(service: Resource, event: Dict[str, Any]) -> None:
     """
     Adds an event to the user's primary Google Calendar.
 
@@ -73,7 +73,7 @@ def add_event(service: Resource, event: Dict) -> None:
 
 
 def create_event(title: Optional[str], start_time: Optional[datetime],
-                 end_time: Optional[datetime], description: Optional[str]) -> Dict:
+                 end_time: Optional[datetime], description: Optional[str]) -> Dict[str, Any]:
     """
     Creates an event dictionary.
     :param title:
@@ -82,6 +82,9 @@ def create_event(title: Optional[str], start_time: Optional[datetime],
     :param description:
     :return: A dictionary containing event details fits the Google Calendar API.
     """
+    if start_time is None or end_time is None:
+        raise ValueError("Start and end times cannot be None")
+
     start = {
         "dateTime": start_time.isoformat(),
         "timeZone": "America/Los_Angeles",
@@ -98,7 +101,7 @@ def create_event(title: Optional[str], start_time: Optional[datetime],
     }
 
 
-def update_event(service: Resource, event_id: str, updated_event: Dict) -> None:
+def update_event(service: Resource, event_id: str, updated_event: Dict[str, Any]) -> None:
     """
     Updates an event on the user's primary Google Calendar.
 
