@@ -1,7 +1,7 @@
 # tests/test_task.py
 import pytest
 from datetime import datetime, timedelta
-from organize_me.task import Task
+from organize_me.app.task import Task
 
 
 @pytest.fixture

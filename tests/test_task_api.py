@@ -2,9 +2,9 @@ import os
 import json
 import pytest
 from typing import Dict
-from organize_me.task_api import TaskApi
-from organize_me.task import Task
-from organize_me.exceptions import TaskNotFoundError
+from organize_me.app.task_api import TaskApi
+from organize_me.app.task import Task
+from organize_me.app.exceptions import TaskNotFoundError
 from tests.test_task import dummy_dates
 
 

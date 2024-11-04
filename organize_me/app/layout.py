@@ -7,12 +7,12 @@ from textual.coordinate import Coordinate
 from textual.widgets.data_table import RowKey
 from textual.containers import Vertical
 
-from organize_me.api import Api
-from organize_me.exceptions import EmptyObjectDataError
-from organize_me.layout_validation import (validate_table_exists, validate_table_not_empty,
-                                           validate_item_exists, safe_action)
+from organize_me.app.api import Api
+from organize_me.app.exceptions import EmptyObjectDataError
+from organize_me.app.layout_validation import (validate_table_exists, validate_table_not_empty,
+                                               validate_item_exists, safe_action)
 # Example API for testing
-from organize_me.exampleApi import ExampleApi
+from organize_me.app.exampleApi import ExampleApi
 
 
 def format_long_date(date: datetime) -> str:

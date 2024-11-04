@@ -2,9 +2,9 @@ import os
 import json
 import uuid
 from typing import Optional, Dict, Any, List, Callable
-from organize_me.exceptions import TaskNotFoundError, DuplicateIdError
-from organize_me.task import Task
-from organize_me.api import Api
+from organize_me.app.exceptions import TaskNotFoundError, DuplicateIdError
+from organize_me.app.task import Task
+from organize_me.app.api import Api
 
 
 class TaskApi(Api):

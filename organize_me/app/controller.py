@@ -1,7 +1,7 @@
-from organize_me.task_api import TaskApi
-from organize_me.layout import Layout
-from organize_me.task import Task
-from organize_me.api import Api
+from organize_me.app.task_api import TaskApi
+from organize_me.app.layout import Layout
+from organize_me.app.task import Task
+from organize_me.app.api import Api
 from datetime import datetime
 from typing import Optional, Dict
 

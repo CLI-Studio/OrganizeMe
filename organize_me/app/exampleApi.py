@@ -1,9 +1,9 @@
 from typing import Any, List, Callable, Tuple
-from organize_me.api import Api
+from organize_me.app.api import Api
 from datetime import datetime
 from random import randint
 
-from organize_me.exceptions import DuplicateIdError
+from organize_me.app.exceptions import DuplicateIdError
 
 
 class ExampleApi(Api):
