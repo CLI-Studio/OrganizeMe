@@ -19,3 +19,7 @@
 /poetry.toml
 
 .make.bootstrap
+
+# sensitive files - google api credentials
+/organize_me/google_calendar/credentials.json
+organize_me/google_calendar/token.json
