@@ -1,16 +1,19 @@
 from datetime import datetime
-from typing import Optional, ClassVar, Any, Dict, Callable, Union
-from pydantic import BaseModel, Field, field_validator, model_validator, ConfigDict
+from enum import StrEnum
+from typing import Optional, ClassVar, Any
+from pydantic import BaseModel, Field, field_validator, model_validator
 
 
 class Task(BaseModel):
-    model_config = ConfigDict(validate_assignment=True)
-
-    ERROR_ID_MUST_BE_POSITIVE: ClassVar[str] = "Task ID must be a positive integer."
-    ERROR_TITLE_EMPTY: ClassVar[str] = "Title cannot be empty or only whitespace."
-    ERROR_DATE_RANGE_MISSING: ClassVar[str] = "Both start and end dates must be provided."
-    ERROR_END_DATE_BEFORE_START: ClassVar[str] = "End date cannot be before the start date."
-    ERROR_CREATE_DATE_IN_FUTURE: ClassVar[str] = "Creation date cannot be set in the future."
+    class Config:
+        validate_assignment = True
+        
+    class Error(StrEnum):
+        ID_MUST_BE_POSITIVE = "Task ID must be a positive integer."
+        TITLE_EMPTY = "Title cannot be empty or only whitespace."
+        DATE_RANGE_MISSING = "Both start and end dates must be provided."
+        END_DATE_BEFORE_START = "End date cannot be before the start date."
+        CREATE_DATE_IN_FUTURE = "Creation date cannot be set in the future."
 
     id: int = Field(frozen=True)
     title: str = Field(...)
@@ -20,32 +23,12 @@ class Task(BaseModel):
     start_date: Optional[datetime] = Field(default=None)
     end_date: Optional[datetime] = Field(default=None)
 
-    @staticmethod
-    def fields() -> Dict[str, Callable[[str], Any]]:
-
-        def date_convert(date_input: Union[str, None, datetime]) -> Optional[datetime]:
-            if isinstance(date_input, str):
-                return datetime.fromisoformat(date_input)
-            elif isinstance(date_input, datetime):
-                return date_input
-            return None
-
-        return {
-            "id": int,
-            "title": str,
-            "description": str,
-            "create_date": lambda x: date_convert(x),
-            "update_date": lambda x: date_convert(x),
-            "start_date": lambda x: date_convert(x),
-            "end_date": lambda x: date_convert(x),
-        }
-
     # noinspection PyNestedDecorators
     @field_validator('id')
     @classmethod
     def validate_id(cls, value: int) -> int:
         if value <= 0:
-            raise ValueError(cls.ERROR_ID_MUST_BE_POSITIVE)
+            raise ValueError(Task.Error.ID_MUST_BE_POSITIVE)
         return value
 
     # noinspection PyNestedDecorators
@@ -53,7 +36,7 @@ class Task(BaseModel):
     @classmethod
     def validate_title(cls, value: str) -> str:
         if not value or not value.strip():
-            raise ValueError(cls.ERROR_TITLE_EMPTY)
+            raise ValueError(Task.Error.TITLE_EMPTY)
         return value.strip()
 
     # noinspection PyNestedDecorators
@@ -67,7 +50,7 @@ class Task(BaseModel):
     @classmethod
     def validate_create_date(cls, value: datetime) -> datetime:
         if value > datetime.now():
-            raise ValueError(cls.ERROR_CREATE_DATE_IN_FUTURE)
+            raise ValueError(Task.Error.CREATE_DATE_IN_FUTURE)
         return value
 
     # noinspection PyNestedDecorators
@@ -77,9 +60,9 @@ class Task(BaseModel):
         start_date = values.get('start_date')
         end_date = values.get('end_date')
         if (start_date and not end_date) or (end_date and not start_date):
-            raise ValueError(cls.ERROR_DATE_RANGE_MISSING)
+            raise ValueError(Task.Error.DATE_RANGE_MISSING)
         if start_date and end_date and end_date < start_date:
-            raise ValueError(cls.ERROR_END_DATE_BEFORE_START)
+            raise ValueError(Task.Error.END_DATE_BEFORE_START)
         return values
 
     def __setattr__(self, key: str, value: Any) -> None:
@@ -95,3 +78,4 @@ class Task(BaseModel):
 
     def __validate__(self) -> None:
         self.__class__.model_validate(self.model_dump())
+        # Task.model_validate(self.model_dump())
